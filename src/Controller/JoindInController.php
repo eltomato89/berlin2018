@@ -19,8 +19,6 @@ class JoindInController
      */
     public function list(Client $client, SerializerInterface $serializer)
     {
-        return JsonResponse::fromJsonString(
-            $serializer->serialize($client->getTalks(), 'json')
-        );
+        return $client->getTalks();
     }
 }

@@ -1,0 +1,25 @@
+
+parameters:
+
+    locale: 'en'
+
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $eventId: 6985
+
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    Negotiation\Negotiator: ~
+
+    GuzzleHttp\Client: ~

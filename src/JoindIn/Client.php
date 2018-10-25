@@ -7,4 +7,6 @@ namespace App\JoindIn;
 interface Client
 {
     public function getTalks();
+
+    public function registerPlugin(Plugin $plugin);
 }

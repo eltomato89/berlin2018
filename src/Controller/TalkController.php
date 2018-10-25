@@ -22,9 +22,7 @@ class TalkController extends AbstractController
      */
     public function list(TalkRepository $repository, SerializerInterface $serializer)
     {
-        return JsonResponse::fromJsonString(
-            $serializer->serialize($repository->all(), 'json')
-        );
+        return $repository->all();
     }
 
     /**
@@ -38,8 +36,6 @@ class TalkController extends AbstractController
             throw new NotFoundHttpException('Talk does not exist');
         }
 
-        return JsonResponse::fromJsonString(
-            $serializer->serialize($talk, 'json')
-        );
+        return $talk;
     }
 }

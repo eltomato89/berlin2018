@@ -11,6 +11,12 @@ services:
         public: false
         bind:
             $eventId: 6985
+            $debug: '%kernel.debug%'
+            $apiPath: '/api'
+
+    _instanceof:
+        App\JoindIn\Plugin:
+            tags: ['api_plugin']
 
     App\:
         resource: '../src/*'
@@ -23,3 +29,20 @@ services:
     Negotiation\Negotiator: ~
 
     GuzzleHttp\Client: ~
+
+
+
+
+
+
+
+
+
+    #GuzzleHttp\Handler\CurlHandler: ~
+
+    #GuzzleHttp\HandlerStack:
+    #    calls:
+    #        - [ setHandler, ['@GuzzleHttp\Handler\CurlHandler']]
+
+
+    #    arguments: [[handler: '@GuzzleHttp\HandlerStack']]

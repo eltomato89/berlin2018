@@ -6,6 +6,7 @@ namespace App\JoindIn;
 
 use App\Entity\Talk;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Psr7\Request;
 
 class SimpleClient implements Client
 {
@@ -22,12 +23,23 @@ class SimpleClient implements Client
     private $guzzle;
 
     /**
+     * @var Plugin[]
+     */
+    private $plugins;
+
+    /**
      * @param int $eventId
      */
     public function __construct(int $eventId, GuzzleClient $guzzle)
     {
         $this->eventId = $eventId;
         $this->guzzle = $guzzle;
+        $this->plugins = [];
+    }
+
+    public function registerPlugin(Plugin $plugin)
+    {
+        $this->plugins[] = $plugin;
     }
 
     public function getTalks()
@@ -37,9 +49,21 @@ class SimpleClient implements Client
             $this->eventId
         );
 
-        $response = $this->guzzle->request('GET', $url);
+        $request = new Request('GET', $url);
 
-        $apiData = json_decode($response->getBody()->getContents(), true);
+        // run plugins
+        foreach ($this->plugins as $plugin) {
+            $request = $plugin->filterRequest($request);
+        }
+
+        $response = $this->guzzle->send($request);
+
+        // run plugins
+        foreach ($this->plugins as $plugin) {
+            $response = $plugin->filterResponse($response);
+        }
+
+        $apiData = json_decode($response->getBody()->__toString(), true);
         $talks = [];
 
         foreach ($apiData['talks'] as $talkData) {
